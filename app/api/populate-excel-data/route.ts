@@ -28,7 +28,7 @@ function parseExcelData(excelData: ExcelData): any[] {
     }
   })
 
-  console.log('[v0] Extracted headers:', headers)
+  console.log('[MDG] Extracted headers:', headers)
 
   // Group data by row
   const rowMap: { [row: number]: { [col: string]: any } } = {}
@@ -74,7 +74,7 @@ function parseExcelData(excelData: ExcelData): any[] {
     }
   })
 
-  console.log('[v0] Parsed', records.length, 'records from Excel data')
+  console.log('[MDG] Parsed', records.length, 'records from Excel data')
   return records
 }
 
@@ -99,10 +99,10 @@ export async function POST(request: NextRequest) {
     // Clear existing data
     const { error: deleteError } = await supabase.from('MDG').delete().neq('id', '')
     if (deleteError) {
-      console.warn('[v0] Warning clearing existing records:', deleteError)
+      console.warn('[MDG] Warning clearing existing records:', deleteError)
     }
 
-    console.log('[v0] Cleared existing MDG records')
+    console.log('[MDG] Cleared existing MDG records')
 
     // Insert records in batches
     let successCount = 0
@@ -113,10 +113,10 @@ export async function POST(request: NextRequest) {
       const { error, data } = await supabase.from('MDG').insert(batch)
 
       if (error) {
-        console.error(`[v0] Error inserting batch ${Math.floor(i / batchSize) + 1}:`, error)
+        console.error(`[MDG] Error inserting batch ${Math.floor(i / batchSize) + 1}:`, error)
       } else {
         successCount += batch.length
-        console.log(`[v0] Inserted batch ${Math.floor(i / batchSize) + 1}: ${batch.length} records`)
+        console.log(`[MDG] Inserted batch ${Math.floor(i / batchSize) + 1}: ${batch.length} records`)
       }
     }
 
@@ -127,7 +127,7 @@ export async function POST(request: NextRequest) {
       inserted: successCount,
     })
   } catch (error) {
-    console.error('[v0] Error populating Excel data:', error)
+    console.error('[MDG] Error populating Excel data:', error)
     return NextResponse.json({ error: String(error) }, { status: 500 })
   }
 }

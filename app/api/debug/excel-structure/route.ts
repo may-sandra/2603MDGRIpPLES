@@ -23,7 +23,7 @@ export async function GET() {
       sampleRecords: records.slice(0, 10),
     })
   } catch (error) {
-    console.error('[v0] Debug error:', error)
+    console.error('[MDG] Debug error:', error)
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Error' },
       { status: 500 }

@@ -105,7 +105,7 @@ export default function DataPage() {
           })
         }
       } catch (error) {
-        console.error('[v0] Error fetching data:', error)
+        console.error('[MDG] Error fetching data:', error)
       } finally {
         setIsLoading(false)
       }

@@ -16,7 +16,7 @@ export async function POST(request: Request) {
       recordsLoaded: result.recordsLoaded
     })
   } catch (error: any) {
-    console.error('[v0] Error loading data:', error)
+    console.error('[MDG] Error loading data:', error)
     return Response.json(
       { error: error.message || 'Failed to load data' },
       { status: 500 }

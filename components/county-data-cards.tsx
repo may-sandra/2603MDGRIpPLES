@@ -110,7 +110,7 @@ export default function CountyDataCards({ selectedCounty, selectedYear = 2024 }:
         const json = await response.json()
         setAllRecords(json.data || [])
       } catch (error) {
-        console.error('[v0] Error fetching data:', error)
+        console.error('[MDG] Error fetching data:', error)
       } finally {
         setIsLoading(false)
       }

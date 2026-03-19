@@ -25,14 +25,14 @@ async function populateMDGData() {
       trim: true,
     })
 
-    console.log(`[v0] Parsed ${records.length} records from CSV`)
+    console.log(`[MDG] Parsed ${records.length} records from CSV`)
 
     // Clear existing data
     const { error: deleteError } = await supabase.from('mdg_records').delete().neq('id', '')
     if (deleteError) {
-      console.error('[v0] Error clearing existing data:', deleteError)
+      console.error('[MDG] Error clearing existing data:', deleteError)
     } else {
-      console.log('[v0] Cleared existing mdg_records')
+      console.log('[MDG] Cleared existing mdg_records')
     }
 
     // Insert records in batches
@@ -77,25 +77,25 @@ async function populateMDGData() {
       const { error } = await supabase.from('mdg_records').insert(formattedBatch)
       
       if (error) {
-        console.error(`[v0] Error inserting batch ${i / batchSize + 1}:`, error)
+        console.error(`[MDG] Error inserting batch ${i / batchSize + 1}:`, error)
         errorCount += batch.length
       } else {
         successCount += batch.length
-        console.log(`[v0] Inserted batch ${i / batchSize + 1}: ${successCount}/${records.length} records`)
+        console.log(`[MDG] Inserted batch ${i / batchSize + 1}: ${successCount}/${records.length} records`)
       }
     }
 
-    console.log(`[v0] Population complete. Success: ${successCount}, Errors: ${errorCount}`)
+    console.log(`[MDG] Population complete. Success: ${successCount}, Errors: ${errorCount}`)
   } catch (error) {
-    console.error('[v0] Error populating MDG data:', error)
+    console.error('[MDG] Error populating MDG data:', error)
     throw error
   }
 }
 
 populateMDGData().then(() => {
-  console.log('[v0] MDG data population finished')
+  console.log('[MDG] MDG data population finished')
   process.exit(0)
 }).catch(error => {
-  console.error('[v0] Fatal error:', error)
+  console.error('[MDG] Fatal error:', error)
   process.exit(1)
 })

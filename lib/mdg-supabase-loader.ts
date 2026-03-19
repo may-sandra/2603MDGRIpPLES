@@ -31,7 +31,7 @@ export interface MDGRecord {
 
 export async function fetchMDGExcelFromStorageBucket(): Promise<MDGRecord[]> {
   try {
-    console.log('[v0] Fetching MDG Excel file from Supabase Storage bucket...')
+    console.log('[MDG] Fetching MDG Excel file from Supabase Storage bucket...')
 
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
     if (!supabaseServiceKey) {
@@ -41,14 +41,14 @@ export async function fetchMDGExcelFromStorageBucket(): Promise<MDGRecord[]> {
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey)
 
     // List all files in the MDG bucket to find Excel file
-    console.log('[v0] Listing files in MDG bucket...')
+    console.log('[MDG] Listing files in MDG bucket...')
     const { data: fileList, error: listError } = await supabaseAdmin
       .storage
       .from('MDG')
       .list('', { limit: 100 })
 
     if (listError) {
-      console.error('[v0] Error listing files in bucket:', listError)
+      console.error('[MDG] Error listing files in bucket:', listError)
       throw listError
     }
 
@@ -62,7 +62,7 @@ export async function fetchMDGExcelFromStorageBucket(): Promise<MDGRecord[]> {
       throw new Error('No Excel file found in MDG bucket. Please upload an Excel file (.xlsx or .xls)')
     }
 
-    console.log('[v0] Found Excel file:', excelFile.name)
+    console.log('[MDG] Found Excel file:', excelFile.name)
 
     // Download the Excel file from storage bucket
     const { data, error } = await supabaseAdmin
@@ -71,7 +71,7 @@ export async function fetchMDGExcelFromStorageBucket(): Promise<MDGRecord[]> {
       .download(excelFile.name)
 
     if (error) {
-      console.error('[v0] Error downloading from storage:', error)
+      console.error('[MDG] Error downloading from storage:', error)
       throw error
     }
 
@@ -90,7 +90,7 @@ export async function fetchMDGExcelFromStorageBucket(): Promise<MDGRecord[]> {
     // Convert to JSON
     const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet)
 
-    console.log('[v0] Successfully parsed Excel from storage:', jsonData.length, 'rows')
+    console.log('[MDG] Successfully parsed Excel from storage:', jsonData.length, 'rows')
 
     // Transform to MDGRecord format
     // Filter out rows that don't have valid Administration values or are header rows
@@ -143,18 +143,18 @@ export async function fetchMDGExcelFromStorageBucket(): Promise<MDGRecord[]> {
 
     return records
   } catch (error) {
-    console.error('[v0] Error in fetchMDGExcelFromStorageBucket:', error)
+    console.error('[MDG] Error in fetchMDGExcelFromStorageBucket:', error)
     throw error
   }
 }
 
 export async function fetchMDGExcelFromSupabase(): Promise<MDGRecord[]> {
   try {
-    console.log('[v0] Fetching MDG data from Supabase MDG table...')
+    console.log('[MDG] Fetching MDG data from Supabase MDG table...')
 
     const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
     if (!supabaseServiceKey) {
-      console.warn('[v0] Service role key not found, using public key')
+      console.warn('[MDG] Service role key not found, using public key')
     }
 
     // Use service role key for full access
@@ -168,12 +168,12 @@ export async function fetchMDGExcelFromSupabase(): Promise<MDGRecord[]> {
       .order('Administration', { ascending: true })
 
     if (error) {
-      console.error('[v0] Error fetching from MDG table:', error)
+      console.error('[MDG] Error fetching from MDG table:', error)
       return getMockMDGData()
     }
 
     if (!data || data.length === 0) {
-      console.log('[v0] No records found in MDG table. Run POST /api/populate-data to load CSV data')
+      console.log('[MDG] No records found in MDG table. Run POST /api/populate-data to load CSV data')
       return getMockMDGData()
     }
 
@@ -225,15 +225,15 @@ export async function fetchMDGExcelFromSupabase(): Promise<MDGRecord[]> {
         } as MDGRecord
       })
 
-    console.log('[v0] Successfully fetched', records.length, 'records from MDG table')
+    console.log('[MDG] Successfully fetched', records.length, 'records from MDG table')
     return records
   } catch (error) {
-    console.error('[v0] Error in fetchMDGExcelFromSupabase:', error)
+    console.error('[MDG] Error in fetchMDGExcelFromSupabase:', error)
     return getMockMDGData()
   }
 }
 
 function getMockMDGData(): MDGRecord[] {
-  console.log('[v0] Using mock MDG data - please upload file to storage bucket')
+  console.log('[MDG] Using mock MDG data - please upload file to storage bucket')
   return []
 }

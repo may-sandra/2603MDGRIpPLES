@@ -70,7 +70,7 @@ export async function loadExcelDataToSupabase(excelData: any) {
     rowNum++
   }
 
-  console.log(`[v0] Parsed ${records.length} records from Excel data`)
+  console.log(`[MDG] Parsed ${records.length} records from Excel data`)
 
   // Insert records in batches
   const batchSize = 100
@@ -82,10 +82,10 @@ export async function loadExcelDataToSupabase(excelData: any) {
       .insert(batch)
     
     if (error) {
-      console.error(`[v0] Error inserting batch ${Math.floor(i / batchSize)}:`, error)
+      console.error(`[MDG] Error inserting batch ${Math.floor(i / batchSize)}:`, error)
       throw error
     }
-    console.log(`[v0] Inserted batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(records.length / batchSize)}`)
+    console.log(`[MDG] Inserted batch ${Math.floor(i / batchSize) + 1}/${Math.ceil(records.length / batchSize)}`)
   }
 
   return { success: true, recordsLoaded: records.length }

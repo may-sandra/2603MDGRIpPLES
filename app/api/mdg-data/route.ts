@@ -3,13 +3,13 @@ import { NextResponse } from 'next/server'
 
 export async function GET() {
   try {
-    console.log('[v0] API: Fetching MDG data from Storage bucket...')
-    console.log('[v0] Storage URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
+    console.log('[MDG] API: Fetching MDG data from Storage bucket...')
+    console.log('[MDG] Storage URL:', process.env.NEXT_PUBLIC_SUPABASE_URL)
     
     const records = await fetchMDGExcelFromStorageBucket()
 
     if (!records || records.length === 0) {
-      console.warn('[v0] API: No records found in storage bucket')
+      console.warn('[MDG] API: No records found in storage bucket')
       return NextResponse.json({
         success: true,
         total: 0,
@@ -18,8 +18,8 @@ export async function GET() {
       })
     }
 
-    console.log('[v0] API: Successfully fetched', records.length, 'records')
-    console.log('[v0] API: Sample record:', records[0])
+    console.log('[MDG] API: Successfully fetched', records.length, 'records')
+    console.log('[MDG] API: Sample record:', records[0])
     
     return NextResponse.json({
       success: true,
@@ -28,7 +28,7 @@ export async function GET() {
       timestamp: new Date().toISOString(),
     })
   } catch (error) {
-    console.error('[v0] API error:', error)
+    console.error('[MDG] API error:', error)
     return NextResponse.json(
       {
         success: false,

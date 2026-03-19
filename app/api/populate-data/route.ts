@@ -26,11 +26,11 @@ export async function POST(request: NextRequest) {
     
     // Parse header
     const header = lines[0].split(',').map(h => h.trim())
-    console.log('[v0] CSV Header:', header)
+    console.log('[MDG] CSV Header:', header)
 
     // Clear existing data from MDG table
     await supabase.from('MDG').delete().neq('ID', '')
-    console.log('[v0] Cleared existing MDG records')
+    console.log('[MDG] Cleared existing MDG records')
 
     // Parse and insert records
     const records = []
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
       records.push(mdgRecord)
     }
 
-    console.log(`[v0] Parsed ${records.length} records from CSV`)
+    console.log(`[MDG] Parsed ${records.length} records from CSV`)
 
     // Insert records in batches
     let successCount = 0
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
       const { error } = await supabase.from('MDG').insert(batch)
       
       if (error) {
-        console.error(`[v0] Error inserting batch ${i / batchSize + 1}:`, error)
+        console.error(`[MDG] Error inserting batch ${i / batchSize + 1}:`, error)
       } else {
         successCount += batch.length
       }
@@ -101,7 +101,7 @@ export async function POST(request: NextRequest) {
       total: records.length,
     })
   } catch (error) {
-    console.error('[v0] Error populating MDG data:', error)
+    console.error('[MDG] Error populating MDG data:', error)
     return NextResponse.json({ error: String(error) }, { status: 500 })
   }
 }

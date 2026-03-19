@@ -49,21 +49,21 @@ export default function DashboardOverview() {
         if (!response.ok) throw new Error('Failed to fetch MDG data')
 
         const json = await response.json()
-        console.log('[v0] Full API response total:', json.total)
+        console.log('[MDG] Full API response total:', json.total)
         const records = json.data || []
 
         if (!records || records.length === 0) {
-          console.log('[v0] No records in response')
+          console.log('[MDG] No records in response')
           setIsLoading(false)
           return
         }
 
-        console.log('[v0] Dashboard received records:', records.length)
+        console.log('[MDG] Dashboard received records:', records.length)
 
         // Filter only to specific counties and National
         const allowedAdministrations = ['Kiambu', 'Kilifi', 'Nyandarua', 'National']
         const filteredRecords = records.filter((r: any) => allowedAdministrations.includes(r.administration))
-        console.log('[v0] Filtered records:', filteredRecords.length)
+        console.log('[MDG] Filtered records:', filteredRecords.length)
 
         // Extract unique administrations (National + counties)
         const administrations = [...new Set(filteredRecords.map((r: any) => r.administration).filter(Boolean))] as string[]
@@ -73,14 +73,14 @@ export default function DashboardOverview() {
         // Extract National Key Insights values
         const nationalRecords = filteredRecords.filter((r: any) => r.administration === 'National')
 
-        console.log('[v0] National records count:', nationalRecords.length)
-        console.log('[v0] Sample national descriptions:', nationalRecords.slice(0, 5).map((r: any) => ({ desc: r.description, data: r.data })))
+        console.log('[MDG] National records count:', nationalRecords.length)
+        console.log('[MDG] Sample national descriptions:', nationalRecords.slice(0, 5).map((r: any) => ({ desc: r.description, data: r.data })))
 
         // Total Households - Number of Households (use insightYear data from data object)
         const householdsRecord = nationalRecords.find((r: any) =>
           r.description?.toLowerCase().includes('number of households')
         )
-        console.log('[v0] Households record found:', !!householdsRecord, 'Description:', householdsRecord?.description, 'Value:', householdsRecord?.data?.[insightYear])
+        console.log('[MDG] Households record found:', !!householdsRecord, 'Description:', householdsRecord?.description, 'Value:', householdsRecord?.data?.[insightYear])
         if (householdsRecord?.data?.[insightYear]) {
           const value = householdsRecord.data[insightYear]
           if (value > 1000000) {
@@ -99,7 +99,7 @@ export default function DashboardOverview() {
           r.data?.[insightYear] !== undefined &&
           r.data?.[insightYear] !== null
         )
-        console.log('[v0] Grid Access record found:', !!gridAccessRecord, 'Description:', gridAccessRecord?.description, 'Value:', gridAccessRecord?.data?.[insightYear])
+        console.log('[MDG] Grid Access record found:', !!gridAccessRecord, 'Description:', gridAccessRecord?.description, 'Value:', gridAccessRecord?.data?.[insightYear])
         if (gridAccessRecord?.data?.[insightYear]) {
           const value = gridAccessRecord.data[insightYear]
           setGridAccess((typeof value === 'number' ? value.toFixed(1) : value) + '%')
@@ -112,7 +112,7 @@ export default function DashboardOverview() {
           r.data?.[insightYear] !== undefined &&
           r.data?.[insightYear] !== null
         )
-        console.log('[v0] Solar record found:', !!solarRecord, 'Description:', solarRecord?.description, 'Value:', solarRecord?.data?.[insightYear])
+        console.log('[MDG] Solar record found:', !!solarRecord, 'Description:', solarRecord?.description, 'Value:', solarRecord?.data?.[insightYear])
         if (solarRecord?.data?.[insightYear]) {
           const value = solarRecord.data[insightYear]
           setSolarHouseholds((typeof value === 'number' ? value.toFixed(1) : value) + '%')
@@ -127,7 +127,7 @@ export default function DashboardOverview() {
         )
 
         if (consumptionRecords.length > 0) {
-          console.log('[v0] Found consumption records:', consumptionRecords.length, consumptionRecords.map((r: any) => r.description))
+          console.log('[MDG] Found consumption records:', consumptionRecords.length, consumptionRecords.map((r: any) => r.description))
 
           const consumptionMap = new Map<string, any>()
           const years = new Set<string>()
@@ -162,12 +162,12 @@ export default function DashboardOverview() {
           })
 
           const consumptionData = Array.from(consumptionMap.values())
-          console.log('[v0] Consumption data extracted:', consumptionData.length, 'records', consumptionData[0])
+          console.log('[MDG] Consumption data extracted:', consumptionData.length, 'records', consumptionData[0])
           if (consumptionData.length > 0) {
             setEnergyData(consumptionData as any)
           }
         } else {
-          console.log('[v0] No consumption records found. Check filter criteria.')
+          console.log('[MDG] No consumption records found. Check filter criteria.')
         }
 
         // Find cooking fuels trends data
@@ -178,7 +178,7 @@ export default function DashboardOverview() {
         )
 
         if (cookingFuelsRecords.length > 0) {
-          console.log('[v0] Found cooking fuels records:', cookingFuelsRecords.length, cookingFuelsRecords.map((r: any) => r.description))
+          console.log('[MDG] Found cooking fuels records:', cookingFuelsRecords.length, cookingFuelsRecords.map((r: any) => r.description))
           const fuelsMap = new Map<string, any>()
           const years = new Set<string>()
 
@@ -210,12 +210,12 @@ export default function DashboardOverview() {
           })
 
           const fuelsData = Array.from(fuelsMap.values())
-          console.log('[v0] Cooking fuels data extracted:', fuelsData.length, 'records', fuelsData[0])
+          console.log('[MDG] Cooking fuels data extracted:', fuelsData.length, 'records', fuelsData[0])
           if (fuelsData.length > 0) {
             setCookingFuelsData(fuelsData as any)
           }
         } else {
-          console.log('[v0] No cooking fuels records found. Available themes:', Array.from(new Set(nationalRecords.map((r: any) => r.theme))).slice(0, 5))
+          console.log('[MDG] No cooking fuels records found. Available themes:', Array.from(new Set(nationalRecords.map((r: any) => r.theme))).slice(0, 5))
         }
 
         // Build county data - show all county records with their values, filtered to allowed counties
@@ -239,12 +239,12 @@ export default function DashboardOverview() {
         })
 
         const capacityData = Array.from(countyDataMap.values()).slice(0, 10) // Limit to 10 for chart readability
-        console.log('[v0] County data extracted:', capacityData.length, 'records')
+        console.log('[MDG] County data extracted:', capacityData.length, 'records')
         if (capacityData.length > 0) {
           setCountyCapacityData(capacityData as any)
         }
       } catch (error) {
-        console.error('[v0] Error loading MDG data:', error)
+        console.error('[MDG] Error loading MDG data:', error)
       } finally {
         setIsLoading(false)
       }

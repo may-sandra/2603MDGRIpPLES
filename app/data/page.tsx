@@ -40,7 +40,7 @@ export default function DataPage() {
       try {
         setIsLoading(true)
         setError(null)
-        console.log('[v0] Data Page: Fetching MDG data...')
+        console.log('[MDG] Data Page: Fetching MDG data...')
         
         const response = await fetch('/api/mdg-data')
         if (!response.ok) {
@@ -51,7 +51,7 @@ export default function DataPage() {
         const data = json.data || []
         
         if (data && Array.isArray(data)) {
-          console.log('[v0] Data Page: Loaded', data.length, 'records')
+          console.log('[MDG] Data Page: Loaded', data.length, 'records')
           setRecords(data)
           setFilteredRecords(data)
           
@@ -62,12 +62,12 @@ export default function DataPage() {
           setCategories(uniqueCategories.sort())
           setAdministrations(uniqueAdmins.sort())
         } else {
-          console.warn('[v0] Data is not an array:', json)
+          console.warn('[MDG] Data is not an array:', json)
           setError('Invalid data format received')
           setRecords([])
         }
       } catch (error) {
-        console.error('[v0] Error fetching data:', error)
+        console.error('[MDG] Error fetching data:', error)
         setError(error instanceof Error ? error.message : 'Failed to fetch data')
       } finally {
         setIsLoading(false)

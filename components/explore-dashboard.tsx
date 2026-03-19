@@ -69,7 +69,7 @@ export default function ExploreDashboard() {
 
         // Log descriptions for debugging
         const descriptions = [...new Set(filteredRecords.map((r: any) => r.description).filter(Boolean))]
-        console.log('[v0] Sample descriptions from database:', descriptions.slice(0, 15))
+        console.log('[MDG] Sample descriptions from database:', descriptions.slice(0, 15))
 
         // Extract available years from data
         const yearsSet = new Set<number>()
@@ -82,15 +82,15 @@ export default function ExploreDashboard() {
           }
         })
         const years = Array.from(yearsSet).sort((a, b) => a - b)
-        console.log('[v0] Available years extracted:', years)
-        console.log('[v0] Sample record data object:', filteredRecords[0]?.data)
+        console.log('[MDG] Available years extracted:', years)
+        console.log('[MDG] Sample record data object:', filteredRecords[0]?.data)
         setAvailableYears(years)
 
         // Set default year to 2019 if available, otherwise first available year
         const year2019 = years.find(y => y === 2019)
         setSelectedYear(year2019 || (years.length > 0 ? years[0] : null))
       } catch (error) {
-        console.error('[v0] Error loading data:', error)
+        console.error('[MDG] Error loading data:', error)
         setAllRecords([])
       } finally {
         setIsLoading(false)

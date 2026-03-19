@@ -35,10 +35,10 @@ export default function CountyDashboard({ county }: CountyDashboardProps) {
         // Filter to ONLY the selected county
         const countyRecords = records.filter((r: any) => r.administration === county)
         
-        console.log('[v0] County Dashboard: Fetching data for', county)
-        console.log('[v0] County Dashboard: Found', countyRecords.length, 'records')
+        console.log('[MDG] County Dashboard: Fetching data for', county)
+        console.log('[MDG] County Dashboard: Found', countyRecords.length, 'records')
         if (countyRecords.length > 0) {
-          console.log('[v0] Sample records:', countyRecords.slice(0, 3).map((r: any) => ({
+          console.log('[MDG] Sample records:', countyRecords.slice(0, 3).map((r: any) => ({
             description: r.description,
             area: r.area,
             hasYearData: r.isYearData,
@@ -62,7 +62,7 @@ export default function CountyDashboard({ county }: CountyDashboardProps) {
         setAvailableYears(years)
         setSelectedYear(years.find(y => y === 2024) || (years.length > 0 ? years[years.length - 1] : 2024))
       } catch (error) {
-        console.error('[v0] County Dashboard Error:', error)
+        console.error('[MDG] County Dashboard Error:', error)
       } finally {
         setIsLoading(false)
       }
